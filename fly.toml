@@ -1,0 +1,28 @@
+# fly.toml app configuration file
+app = 'pipecat-livekit-food-ordering'
+primary_region = 'ord'
+kill_signal = 'SIGINT'
+kill_timeout = '5s'
+
+[experimental]
+  auto_rollback = true
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[env]
+  PORT = '7860'
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 7860
+  processes = ['app']
+
+  [[services.ports]]
+    port = 80
+    handlers = ['http']
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ['tls', 'http']

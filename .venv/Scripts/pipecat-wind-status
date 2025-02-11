@@ -1,0 +1,93 @@
+#!C:\Users\dagt1\OneDrive\Desktop\pipecat\repos\tinkerPipecatWebRtcDailyTwilio\pipecatFloww_livekit_twilio\.venv\Scripts\python.exe
+# coding: utf-8
+
+from __future__ import unicode_literals
+
+import argparse
+import ConfigParser
+import logging
+import os
+import sys
+
+import requests
+
+import pipecat.device.weather
+import pipecat.filter
+import pipecat.http
+import pipecat.store
+import pipecat.utility
+import pipecat.xml
+
+logging.basicConfig(level=logging.INFO)
+
+config = os.path.expanduser("~/.pipecat/wind-status")
+
+config_parser = argparse.ArgumentParser(add_help=False)
+config_parser.add_argument("--config", default=config, help="Configuration file.  Default: %(default)s")
+arguments, remaining_argv = config_parser.parse_known_args()
+
+defaults = {
+    "pushover_token": None,
+    "pushover_user": None,
+    "station": None,
+    }
+if arguments.config:
+    config = ConfigParser.SafeConfigParser()
+    config.read([arguments.config])
+    if config.has_option("pushover", "token"):
+        defaults["pushover_token"] = config.get("pushover", "token")
+    if config.has_option("pushover", "user"):
+        defaults["pushover_user"] = config.get("pushover", "user")
+    if config.has_option("station", "id"):
+        defaults["station"] = config.get("station", "id")
+
+parser = argparse.ArgumentParser(parents=[config_parser])
+parser.set_defaults(**defaults)
+parser.add_argument("--pushover-token", help="Use pushover.net for notifications.  Default: %(default)s")
+parser.add_argument("--pushover-user", help="Use pushover.net for notifications.  Default: %(default)s")
+parser.add_argument("--station", help="METARs station.  Default: %(default)s")
+parser.add_argument("--version", action="version", version="%(prog)s " + pipecat.__version__)
+arguments = parser.parse_args(remaining_argv)
+
+if arguments.station is None:
+    raise ValueError("You must specify a METARs station using ~/.pipecat/wind-status or --station.")
+
+pipe = pipecat.http.get("https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=12&mostRecent=true&stationString=%s" % arguments.station, poll=pipecat.quantity(900, pipecat.units.seconds))
+pipe = pipecat.xml.parse(pipe)
+pipe = pipecat.device.weather.metars(pipe)
+pipe = pipecat.filter.duplicates(pipe, "observation-time")
+pipe = pipecat.store.cache(pipe)
+
+for record in pipe:
+    observation_time = record["observation-time"].to("local")
+    station = record["station-id"]
+    wind = record["wind-speed"]
+
+    # Clear the contents of the cache whenever we start a new day.
+    if len(pipe.table) > 1 and observation_time.day != pipe.table["observation-time"][-2].to("local").day:
+        pipe.table.reset()
+        pipe.table.append(record)
+
+    message = u"{} wind ".format(station)
+    if len(pipe.table) > 1:
+        deltas = pipe.table["wind-speed"][1:] - pipe.table["wind-speed"][:-1]
+        for delta in deltas:
+            if delta.magnitude > 0:
+                message += u"\u2191"
+            elif delta.magnitude == 0:
+                message += u"\u2219"
+            else:
+                message += u"\u2193"
+    message += u"{:~P} at {:HHmm}".format(wind, observation_time)
+
+    sys.stdout.write("{}\n".format(message))
+
+    if arguments.pushover_token is not None and arguments.pushover_user is not None:
+        parameters = {
+            "token": arguments.pushover_token,
+            "user": arguments.pushover_user,
+            "title": "Weather update",
+            "message": message,
+        }
+        requests.post("https://api.pushover.net/1/messages.json", params=parameters)
+

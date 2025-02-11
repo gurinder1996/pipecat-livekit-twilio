@@ -1,0 +1,82 @@
+#!C:\Users\dagt1\OneDrive\Desktop\pipecat\repos\tinkerPipecatWebRtcDailyTwilio\pipecatFloww_livekit_twilio\.venv\Scripts\python.exe
+# coding: utf-8
+
+from __future__ import unicode_literals
+
+import argparse
+import ConfigParser
+import logging
+import os
+import sys
+
+import requests
+#import serial
+
+import pipecat.device.charger
+import pipecat.device.serial
+import pipecat.limit
+import pipecat.store
+import pipecat.utility
+
+logging.basicConfig(level=logging.INFO)
+
+config = os.path.expanduser("~/.pipecat/charger-status")
+
+config_parser = argparse.ArgumentParser(add_help=False)
+config_parser.add_argument("--config", default=config, help="Configuration file.  Default: %(default)s")
+config_parser.add_argument("--port", default="/dev/cu.SLAB_USBtoUART", help="Serial port.  Default: %(default)s")
+arguments, remaining_argv = config_parser.parse_known_args()
+
+defaults = {
+    "pushover_token": None,
+    "pushover_user": None,
+    }
+if arguments.config:
+    config = ConfigParser.SafeConfigParser()
+    config.read([arguments.config])
+    if config.has_option("pushover", "token"):
+        defaults["pushover_token"] = config.get("pushover", "token")
+    if config.has_option("pushover", "user"):
+        defaults["pushover_user"] = config.get("pushover", "user")
+
+parser = argparse.ArgumentParser(parents=[config_parser])
+parser.set_defaults(**defaults)
+parser.add_argument("--pushover-token", help="Use pushover.net for notifications.  Default: %(default)s")
+parser.add_argument("--pushover-user", help="Use pushover.net for notifications.  Default: %(default)s")
+parser.add_argument("--version", action="version", version="%(prog)s " + pipecat.__version__)
+arguments = parser.parse_args(remaining_argv)
+
+#pipe = pipecat.utility.readline(serial.serial_for_url(arguments.port, baudrate=128000))
+pipe = pipecat.device.serial.readline(arguments.port, baudrate=128000)
+pipe = pipecat.device.charger.icharger208b(pipe)
+pipe = pipecat.utility.add_timestamp(pipe)
+pipe = pipecat.limit.timeout(pipe, timeout=pipecat.quantity(10, pipecat.units.seconds))
+pipe = pipecat.limit.until(pipe, ("charger", "mode"), "finished")
+pipe = pipecat.store.cache(pipe)
+
+for record in pipe:
+    mode = record[("charger", "mode")]
+    voltage = record[("battery", "voltage")]
+    current = record[("battery", "current")]
+    charge = record[("battery", "charge")]
+
+    sys.stdout.write("{} {:.4~} {:~} {:~}\n".format(
+        mode,
+        voltage,
+        current,
+        charge,
+        ))
+
+if len(pipe.table):
+    last_voltage = pipe.table[("battery", "voltage")].to(pipecat.units.volt).magnitude[-1]
+    last_charge = pipe.table[("battery", "charge")].to(pipecat.units.milliamp * pipecat.units.hour).magnitude[-1]
+
+    if arguments.pushover_token is not None and arguments.pushover_user is not None:
+        parameters = {
+            "token": arguments.pushover_token,
+            "user": arguments.pushover_user,
+            "title": "Charger Finished",
+            "message": "Battery voltage: %s V\nTotal charge: %s mAH" % (last_voltage, last_charge),
+        }
+        requests.post("https://api.pushover.net/1/messages.json", params=parameters)
+

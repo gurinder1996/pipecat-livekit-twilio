@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-dotenv
+aiohttp
+loguru
+twilio
+livekit-api
+deepgram-sdk
+pipecat
+python-multipart
