@@ -1,16 +1,291 @@
+generous-simplicity
+
+
+production
+Architecture
+Observability
+Logs
+Settings
+
+Share
+
+
+
+
+
+Activity
+
+web
+
+Deployment failed
+
+74 seconds ago
+
+web
+
+Deployment failed
+
+4 mins ago
+
+web
+
+Deployment crashed
+
+29 mins ago
+
+web
+
+Deployment crashed
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+web
+
+Deployment restarted
+
+29 mins ago
+
+
+Fetch More
+
+web
+Deployments
+Variables
+Metrics
+Settings
+web-production-388c8.up.railway.app
+US West
+1 Replica
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+History
+
+
+
+
+
+
+
+
+
+
+
+
+
+web
+/
+2715982
+Feb 11, 2025 1:07 PM
+
+Failed
+
+web-production-388c8.up.railway.app
+
+Get Help
+
+Details
+Build Logs
+Deploy Logs
+HTTP Logs
+
+Filter
+Filter logs using "", (), AND, OR, -
+
+
+
+You reached the start of the range → Feb 11, 2025 1:07 PM
+
+[ 1/10] FROM docker.io/library/python:3.11-bullseye@sha256:a9a6e83e3161ef37050ff3207ebee2b358e5cddcf9943c3bb1932df6ce4bdc57
+
+[internal] load build context  ✔ 0ms
+
+[ 1/10] FROM docker.io/library/python:3.11-bullseye@sha256:a9a6e83e3161ef37050ff3207ebee2b358e5cddcf9943c3bb1932df6ce4bdc57
+
+[ 1/10] FROM docker.io/library/python:3.11-bullseye@sha256:a9a6e83e3161ef37050ff3207ebee2b358e5cddcf9943c3bb1932df6ce4bdc57  ✔ 0ms
+
+[ 1/10] FROM docker.io/library/python:3.11-bullseye@sha256:a9a6e83e3161ef37050ff3207ebee2b358e5cddcf9943c3bb1932df6ce4bdc57
+
+[internal] load build context
+
+[ 1/10] FROM docker.io/library/python:3.11-bullseye@sha256:a9a6e83e3161ef37050ff3207ebee2b358e5cddcf9943c3bb1932df6ce4bdc57  ✔ 44ms
+
+[ 1/10] FROM docker.io/library/python:3.11-bullseye@sha256:a9a6e83e3161ef37050ff3207ebee2b358e5cddcf9943c3bb1932df6ce4bdc57
+
+[internal] load build context  ✔ 69ms
+
+[ 2/10] RUN apt-get update && apt-get install --no-install-recommends -y     build-essential     git     ffmpeg     google-perftools     ca-certificates curl gnupg     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+Get:1 http://deb.debian.org/debian bullseye InRelease [116 kB]
+
+Get:2 http://deb.debian.org/debian-security bullseye-security InRelease [27.2 kB]
+
+Get:3 http://deb.debian.org/debian bullseye-updates InRelease [44.1 kB]
+
+Get:4 http://deb.debian.org/debian bullseye/main amd64 Packages [8066 kB]
+
+Get:5 http://deb.debian.org/debian-security bullseye-security/main amd64 Packages [344 kB]
+
+Get:6 http://deb.debian.org/debian bullseye-updates/main amd64 Packages [18.8 kB]
+
+Fetched 8616 kB in 1s (7100 kB/s)
+Reading package lists...
+
+
+
+Reading package lists...
+
+
+
+Building dependency tree...
+
+
+Reading state information...
+
+
+
+ca-certificates is already the newest version (20210119).
+gnupg is already the newest version (2.2.27-2+deb11u2).
+curl is already the newest version (7.74.0-1.3+deb11u14).
+git is already the newest version (1:2.30.2-1+deb11u4).
+The following additional packages will be installed:
+  libasound2 libasound2-data libass9 libasyncns0 libavc1394-0 libavcodec58
+  libavdevice58 libavfilter7 libavformat58 libavresample4 libavutil56 libblas3
+  libbluray2 libbs2b0 libcaca0 libcdio-cdda2 libcdio-paranoia2 libcdio19
+
+  libchromaprint1 libcodec2-0.9 libdbus-1-3 libdc1394-25 libdrm-amdgpu1
+
+  libdrm-common libdrm-intel1 libdrm-nouveau2 libdrm-radeon1 libdrm2 libflac8
+
+  libflite1 libgbm1 libgfortran5 libgl1 libgl1-mesa-dri libglapi-mesa
+
+  libglvnd0 libglx-mesa0 libglx0 libgme0 libgoogle-perftools4 libgsm1
+
+  libiec61883-0 libjack-jackd2-0 liblapack3 liblilv-0-0 libllvm11 libmfx1
+
+  libmp3lame0 libmpg123-0 libmysofa1 libnorm1 libogg0 libopenal-data
+
+  libopenal1 libopenmpt0 libopus0 libpciaccess0 libpgm-5.3-0 libpocketsphinx3
+
+  libpostproc55 libpulse0 librabbitmq4 libraw1394-11 librubberband2
+  libsamplerate0 libsdl2-2.0-0 libsensors-config libsensors5 libserd-0-0
+
   libshine3 libslang2 libsnappy1v5 libsndfile1 libsndio7.0 libsodium23
   libsord-0-0 libsoxr0 libspeex1 libsphinxbase3 libsratom-0-0 libsrt1.4-gnutls
+
   libssh-gcrypt-4 libswresample3 libswscale5 libtcmalloc-minimal4 libtheora0
 
   libtwolame0 libudfread0 libunwind8 libusb-1.0-0 libva-drm2 libva-x11-2
-  libva2 libvdpau1 libvidstab1.1 libvorbis0a libvorbisenc2 libvorbisfile3
 
+  libva2 libvdpau1 libvidstab1.1 libvorbis0a libvorbisenc2 libvorbisfile3
   libvpx6 libvulkan1 libwavpack1 libwayland-client0 libwayland-cursor0
 
   libwayland-egl1 libwayland-server0 libwrap0 libx11-xcb1 libx264-160
   libxcb-dri2-0 libxcb-dri3-0 libxcb-glx0 libxcb-present0 libxcb-shape0
 
   libxcb-sync1 libxcb-xfixes0 libxcursor1 libxdamage1 libxfixes3 libxi6
+
   libxinerama1 libxkbcommon0 libxrandr2 libxshmfence1 libxv1 libxvidcore4
 
   libxxf86vm1 libz3-4 libzmq5 libzvbi-common libzvbi0 ocl-icd-libopencl1
@@ -49,26 +324,27 @@ The following NEW packages will be installed:
   libopenmpt0 libopus0 libpciaccess0 libpgm-5.3-0 libpocketsphinx3
 
   libpostproc55 libpulse0 librabbitmq4 libraw1394-11 librubberband2
+
   libsamplerate0 libsdl2-2.0-0 libsensors-config libsensors5 libserd-0-0
 
   libshine3 libslang2 libsnappy1v5 libsndfile1 libsndio7.0 libsodium23
-
   libsord-0-0 libsoxr0 libspeex1 libsphinxbase3 libsratom-0-0 libsrt1.4-gnutls
 
   libssh-gcrypt-4 libswresample3 libswscale5 libtcmalloc-minimal4 libtheora0
   libtwolame0 libudfread0 libunwind8 libusb-1.0-0 libva-drm2 libva-x11-2
 
   libva2 libvdpau1 libvidstab1.1 libvorbis0a libvorbisenc2 libvorbisfile3
-
   libvpx6 libvulkan1 libwavpack1 libwayland-client0 libwayland-cursor0
 
   libwayland-egl1 libwayland-server0 libwrap0 libx11-xcb1 libx264-160
   libxcb-dri2-0 libxcb-dri3-0 libxcb-glx0 libxcb-present0 libxcb-shape0
 
   libxcb-sync1 libxcb-xfixes0 libxcursor1 libxdamage1 libxfixes3 libxi6
+
   libxinerama1 libxkbcommon0 libxrandr2 libxshmfence1 libxv1 libxvidcore4
 
   libxxf86vm1 libz3-4 libzmq5 libzvbi-common libzvbi0 ocl-icd-libopencl1
+
   xkb-data
 
 0 upgraded, 135 newly installed, 0 to remove and 0 not upgraded.
@@ -113,3 +389,17 @@ Get:18 http://deb.debian.org/debian bullseye/main amd64 libspeex1 amd64 1.2~rc1.
 Get:19 http://deb.debian.org/debian bullseye/main amd64 libsoxr0 amd64 0.1.3-4 [77.8 kB]
 
 Get:20 http://deb.debian.org/debian-security bullseye-security/main amd64 libswresample3 amd64 7:4.3.8-0+deb11u2 [115 kB]
+
+Get:21 http://deb.debian.org/debian bullseye/main amd64 libogg0 amd64 1.3.4-0.1 [27.3 kB]
+
+Get:22 http://deb.debian.org/debian bullseye/main amd64 libtheora0 amd64 1.1.1+dfsg.1-15 [169 kB]
+
+Get:23 http://deb.debian.org/debian bullseye/main amd64 libtwolame0 amd64 0.4.0-2 [51.1 kB]
+
+Get:24 http://deb.debian.org/debian bullseye/main amd64 libvorbis0a amd64 1.3.7-1 [93.0 kB]
+You reached the present time
+
+Try Loading More
+
+
+web | Railway

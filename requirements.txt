@@ -6,8 +6,7 @@ loguru~=0.7.3
 twilio
 livekit-api
 deepgram-sdk
-pipecat
-python-multipart
+pipecat-ai[daily,cartesia,openai,silero,deepgram]==0.0.54
 numpy~=1.26.4
 Pillow~=11.1.0
 protobuf~=5.29.3
