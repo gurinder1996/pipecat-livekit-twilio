@@ -323,14 +323,24 @@ async def twilio_start_bot(request: Request):
         # Connect Twilio call to LiveKit via SIP
         response = VoiceResponse()
         
-        # Get the LiveKit URL without the wss:// prefix
+        # Get the LiveKit URL without the wss:// prefix and add sip. subdomain
         livekit_url = os.getenv("LIVEKIT_URL", "").replace("wss://", "")
-        sip_uri = f"sip:@{livekit_url};transport=tls"
+        if "." in livekit_url:
+            domain_parts = livekit_url.split(".")
+            domain_parts.insert(0, "sip")
+            sip_domain = ".".join(domain_parts)
+        else:
+            sip_domain = f"sip.{livekit_url}"
+
+        # Construct SIP URI with authentication
+        sip_uri = f"sip:{room_name}@{sip_domain}"
         
         dial = response.dial()
-        dial.sip(sip_uri, 
-                username=room_name,  # Use room name as username
-                password=os.getenv("LIVEKIT_API_SECRET"))  # Use API secret as password
+        dial.sip(
+            sip_uri,
+            username=os.getenv("LIVEKIT_API_KEY"),
+            password=os.getenv("LIVEKIT_API_SECRET")
+        )
 
         return str(response)
 
