@@ -32,7 +32,6 @@ from pipecat.transports.services.livekit import LiveKitParams, LiveKitTransport
 from pipecat_flows import FlowArgs, FlowConfig, FlowManager, FlowResult
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import PlainTextResponse
 from twilio.twiml.voice_response import VoiceResponse
 
 load_dotenv(override=True)
@@ -295,7 +294,7 @@ app.add_middleware(
 async def root():
     return {"message": "LiveKit Restaurant Bot API"}
 
-@app.post("/twilio_start_bot", response_class=PlainTextResponse)
+@app.post("/twilio_start_bot")
 async def twilio_start_bot(request: Request):
     """Handle incoming Twilio calls."""
     try:
@@ -328,7 +327,7 @@ async def twilio_start_bot(request: Request):
             loop=10
         )
 
-        return PlainTextResponse(str(response))
+        return str(response)
 
     except Exception as e:
         logger.error(f"Error in twilio_start_bot: {str(e)}")
