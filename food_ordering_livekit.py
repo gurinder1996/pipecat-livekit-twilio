@@ -320,12 +320,17 @@ async def twilio_start_bot(request: Request):
             logger.error(f"Failed to join LiveKit room: {str(e)}")
             raise HTTPException(status_code=500, detail=f"Failed to join LiveKit room: {str(e)}")
 
-        # Put caller on hold with music while bot joins
+        # Connect Twilio call to LiveKit via SIP
         response = VoiceResponse()
-        response.play(
-            url="http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3",
-            loop=10
-        )
+        
+        # Get the LiveKit URL without the wss:// prefix
+        livekit_url = os.getenv("LIVEKIT_URL", "").replace("wss://", "")
+        sip_uri = f"sip:@{livekit_url};transport=tls"
+        
+        dial = response.dial()
+        dial.sip(sip_uri, 
+                username=room_name,  # Use room name as username
+                password=os.getenv("LIVEKIT_API_SECRET"))  # Use API secret as password
 
         return str(response)
 
