@@ -5,7 +5,7 @@ aiohttp~=3.11.11
 loguru~=0.7.3
 twilio
 livekit-api
-livekit-sdk-python
+livekit
 deepgram-sdk
 pipecat-ai[daily,cartesia,openai,silero,deepgram]==0.0.54
 numpy~=1.26.4
