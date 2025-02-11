@@ -7,7 +7,8 @@ twilio
 livekit-api
 livekit
 deepgram-sdk
-pipecat-ai[daily,cartesia,openai,silero,deepgram]==0.0.54
+python-multipart
+pipecat-ai[daily,cartesia,openai,silero,deepgram,livekit]==0.0.54
 numpy~=1.26.4
 Pillow~=11.1.0
 protobuf~=5.29.3
