@@ -26,6 +26,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY --chown=user:user . .
 
+# Install pipecat from local directory
+WORKDIR /home/user/app/pipecat
+RUN pip install --no-cache-dir .
+WORKDIR /home/user/app
+
 # Add local bin to PATH to avoid warnings
 ENV PATH="/home/user/.local/bin:${PATH}"
 
