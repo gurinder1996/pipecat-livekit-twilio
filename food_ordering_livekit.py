@@ -30,8 +30,10 @@ from pipecat.services.deepgram import DeepgramSTTService
 from pipecat.services.openai import OpenAILLMService
 from pipecat.transports.services.livekit import LiveKitParams, LiveKitTransport
 from pipecat_flows import FlowArgs, FlowConfig, FlowManager, FlowResult
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import PlainTextResponse
+from twilio.twiml.voice_response import VoiceResponse
 
 load_dotenv(override=True)
 
@@ -292,6 +294,45 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {"message": "LiveKit Restaurant Bot API"}
+
+@app.post("/twilio_start_bot", response_class=PlainTextResponse)
+async def twilio_start_bot(request: Request):
+    """Handle incoming Twilio calls."""
+    try:
+        logger.info("Received Twilio webhook call")
+        form = await request.form()
+        logger.debug(f"Form data: {dict(form)}")
+        
+        call_sid = form.get("CallSid")
+        if not call_sid:
+            logger.error("Missing CallSid in form data")
+            raise HTTPException(status_code=400, detail="Missing CallSid")
+
+        logger.info(f"Call details - ID: {call_sid}")
+
+        # Create a LiveKit room using the CallSid as room name
+        room_name = f"room-{call_sid}"
+        
+        # Join room as agent
+        try:
+            await join_room_as_agent(room_name)
+            logger.info(f"Agent joined room: {room_name}")
+        except Exception as e:
+            logger.error(f"Failed to join LiveKit room: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Failed to join LiveKit room: {str(e)}")
+
+        # Put caller on hold with music while bot joins
+        response = VoiceResponse()
+        response.play(
+            url="http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3",
+            loop=10
+        )
+
+        return PlainTextResponse(str(response))
+
+    except Exception as e:
+        logger.error(f"Error in twilio_start_bot: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/join/{room_name}")
 async def join_room(room_name: str):
