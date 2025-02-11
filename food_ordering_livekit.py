@@ -30,6 +30,8 @@ from pipecat.services.deepgram import DeepgramSTTService
 from pipecat.services.openai import OpenAILLMService
 from pipecat.transports.services.livekit import LiveKitParams, LiveKitTransport
 from pipecat_flows import FlowArgs, FlowConfig, FlowManager, FlowResult
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv(override=True)
 
@@ -275,6 +277,29 @@ async def join_room_as_agent(room_name: str):
     except Exception as e:
         logger.error(f"Error joining room as agent: {str(e)}")
         raise
+
+app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+async def root():
+    return {"message": "LiveKit Restaurant Bot API"}
+
+@app.post("/join/{room_name}")
+async def join_room(room_name: str):
+    try:
+        await join_room_as_agent(room_name)
+        return {"message": f"Joined room {room_name}"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import argparse
