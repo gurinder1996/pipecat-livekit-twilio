@@ -4,6 +4,6 @@ dockerfilePath = "Dockerfile"
 
 [deploy]
 dockerfilePath = "Dockerfile"
-startCommand = "uvicorn pipecatFloww_livekit_twilio:app --host 0.0.0.0 --port 8080"
+startCommand = "uvicorn food_ordering_livekit:app --host 0.0.0.0 --port 8080"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10

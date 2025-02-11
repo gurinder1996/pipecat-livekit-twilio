@@ -30,4 +30,4 @@ COPY --chown=user:user . .
 ENV PATH="/home/user/.local/bin:${PATH}"
 
 # Run the FastAPI application
-CMD ["uvicorn", "pipecatFloww_livekit_twilio:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "food_ordering_livekit:app", "--host", "0.0.0.0", "--port", "8080"]
