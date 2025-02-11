@@ -1,10 +1,20 @@
 fastapi
 uvicorn
 python-dotenv
-aiohttp
-loguru
+aiohttp~=3.11.11
+loguru~=0.7.3
 twilio
 livekit-api
 deepgram-sdk
 pipecat
 python-multipart
+numpy~=1.26.4
+Pillow~=11.1.0
+protobuf~=5.29.3
+pydantic~=2.10.5
+pyloudnorm~=0.1.1
+resampy~=0.4.3
+soxr~=0.5.0
+httpx~=0.27.2
+Markdown~=3.7
+-e pipecat/
